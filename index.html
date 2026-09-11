@@ -14,6 +14,8 @@
     --dark-2:#1b1a18;
     --on-dark:#f3f2ee;
     --on-dark-muted:#9c9a93;
+    --success:#1a7f4e;
+    --error:#b3261e;
     --r-card:20px;
     --r-pill:999px;
     --sans:'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -56,6 +58,17 @@
   .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
   .brand svg{ width:26px; height:26px; flex:none; color:var(--ink); }
   .brand b{ font-weight:600; font-size:16px; letter-spacing:-0.01em; }
+
+  .nav-right{ display:flex; align-items:center; gap:22px; }
+  .lang-toggle{ display:flex; align-items:center; gap:6px; }
+  .lang-btn{
+    display:flex; padding:3px; border-radius:6px; border:1px solid transparent;
+    background:none; cursor:pointer; opacity:.5; transition:opacity .15s ease, border-color .15s ease;
+    line-height:0;
+  }
+  .lang-btn svg{ width:24px; height:16px; display:block; border-radius:2px; }
+  .lang-btn:hover{ opacity:.85; }
+  .lang-btn[aria-pressed="true"]{ opacity:1; border-color:var(--line); }
 
   nav.links{ display:flex; align-items:center; gap:30px; }
   nav.links a{ font-size:14.5px; text-decoration:none; color:var(--ink-soft); position:relative; padding-block:4px; }
@@ -124,6 +137,27 @@
   .sister p{ max-width:60ch; color:var(--ink); }
   .sister strong{ font-weight:600; }
 
+  /* ---------- contact form ---------- */
+  .contact-form{ display:flex; flex-direction:column; gap:18px; margin-top:8px; }
+  .field-row{ display:flex; gap:18px; flex-wrap:wrap; }
+  .field-row > label{ flex:1; min-width:200px; }
+  .contact-form label{ display:flex; flex-direction:column; gap:7px; }
+  .contact-form label > span{ font-size:13px; color:var(--ink-soft); }
+  .contact-form input, .contact-form select, .contact-form textarea{
+    font-family:var(--sans); font-size:15px; color:var(--ink);
+    background:var(--bg-2); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px; resize:vertical;
+  }
+  .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus{
+    outline:none; border-color:var(--ink);
+  }
+  .contact-form .btn{ align-self:flex-start; border:none; cursor:pointer; }
+  .contact-form .btn:disabled{ opacity:.6; cursor:default; transform:none; box-shadow:none; }
+  .contact-form .hp{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+  .form-status{ font-size:14px; margin:0; }
+  .form-status.success{ color:var(--success); }
+  .form-status.error{ color:var(--error); }
+
   /* ---------- projects grid ---------- */
   .proj-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:20px; margin-top:44px; }
   .proj-card{
@@ -179,11 +213,36 @@
       </svg>
       <b>Sales Architects</b>
     </a>
-    <nav class="links">
-      <a href="#/" data-route aria-current="page">What we do</a>
-      <a href="#/projects" data-route>Projects</a>
-      <a class="btn" href="mailto:hello@sales-architects.nl">Start a project →</a>
-    </nav>
+    <div class="nav-right">
+      <div class="lang-toggle" role="group" aria-label="Language / Taal">
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="true" title="English">
+          <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="60" height="36" fill="#012169"/>
+            <line x1="0" y1="0" x2="60" y2="36" stroke="#fff" stroke-width="10"/>
+            <line x1="60" y1="0" x2="0" y2="36" stroke="#fff" stroke-width="10"/>
+            <line x1="0" y1="0" x2="60" y2="36" stroke="#C8102E" stroke-width="3.5"/>
+            <line x1="60" y1="0" x2="0" y2="36" stroke="#C8102E" stroke-width="3.5"/>
+            <rect x="0" y="14" width="60" height="8" fill="#fff"/>
+            <rect x="24" y="0" width="12" height="36" fill="#fff"/>
+            <rect x="0" y="16" width="60" height="4" fill="#C8102E"/>
+            <rect x="26" y="0" width="8" height="36" fill="#C8102E"/>
+          </svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="nl" aria-pressed="false" title="Nederlands">
+          <svg viewBox="0 0 60 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect width="60" height="12" y="0" fill="#AE1C28"/>
+            <rect width="60" height="12" y="12" fill="#fff"/>
+            <rect width="60" height="12" y="24" fill="#21468B"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="links">
+        <a href="#/" data-route aria-current="page" data-i18n="nav.what">What we do</a>
+        <a href="#/projects" data-route data-i18n="nav.projects">Projects</a>
+        <a href="#contact" onclick="scrollToContact(event)" data-i18n="nav.contact">Contact</a>
+        <a class="btn" href="#contact" onclick="scrollToContact(event)" data-i18n="nav.cta">Start a project →</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -217,13 +276,13 @@
     </div>
     <div class="wrap">
       <p class="eyebrow">Sales-architects.nl · studio</p>
-      <h1>Engineered for the AI-native sale.</h1>
+      <h1 data-i18n="hero.h1">Engineered for the AI-native sale.</h1>
       <div class="hero-row">
         <div class="cta-row">
-          <a class="btn" href="mailto:hello@sales-architects.nl">Start a project →</a>
-          <a class="link-quiet" href="#/projects" data-route>See our work</a>
+          <a class="btn" href="#contact" onclick="scrollToContact(event)" data-i18n="nav.cta">Start a project →</a>
+          <a class="link-quiet" href="#/projects" data-route data-i18n="hero.seeWork">See our work</a>
         </div>
-        <p class="lede">AI training, AI tools, websites, hosting, and search — designed and run as one connected build, not five separate vendors.</p>
+        <p class="lede" data-i18n="hero.lede">AI training, AI tools, websites, hosting, and search — designed and run as one connected build, not five separate vendors.</p>
       </div>
     </div>
     <div class="hero-spacer"></div>
@@ -232,9 +291,9 @@
   <section class="on-paper">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">What we do</p>
-        <h2>Five disciplines, one build.</h2>
-        <p>We train your people, design and build the tools, host them, and keep everything findable — one connected job.</p>
+        <p class="eyebrow" data-i18n="nav.what">What we do</p>
+        <h2 data-i18n="services.h2">Five disciplines, one build.</h2>
+        <p data-i18n="services.intro">We train your people, design and build the tools, host them, and keep everything findable — one connected job.</p>
       </div>
       <div class="details">
         <div class="detail">
@@ -404,9 +463,9 @@
 <circle cx="98.1" cy="176.8" r="1.00" fill="#f2f2f0" opacity="0.44"/>
 <circle cx="80.9" cy="178.4" r="0.85" fill="#f2f2f0" opacity="0.37"/>
 <circle cx="97.7" cy="179.5" r="0.71" fill="#f2f2f0" opacity="0.30"/></svg></div>
-          <h3>AI training &amp; policy</h3>
-          <p>Tailor-made AI and GPT training for your team, plus AI policy we help you write and actually put into practice.</p>
-          <a class="more" href="mailto:hello@sales-architects.nl">Ask about this →</a>
+          <h3 data-i18n="card1.title">AI training &amp; policy</h3>
+          <p data-i18n="card1.desc">Tailor-made AI and GPT training for your team, plus AI policy we help you write and actually put into practice.</p>
+          <a class="more" href="#contact" onclick="scrollToContact(event,'AI training &amp; policy')" data-i18n="card1.link">Ask about training →</a>
         </div>
         <div class="detail">
           <div class="pattern"><svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><line x1="28.1" y1="91.0" x2="25.2" y2="80.7" stroke="#f2f2f0" stroke-width="0.8" opacity="0.35"/>
@@ -457,9 +516,9 @@
 <circle cx="63.2" cy="134.3" r="2.82" fill="#f2f2f0" opacity="0.81"/>
 <circle cx="45.3" cy="101.4" r="3.00" fill="#f2f2f0" opacity="0.69"/>
 <circle cx="109.4" cy="72.1" r="2.71" fill="#f2f2f0" opacity="0.82"/></svg></div>
-          <h3>AI tools &amp; automation</h3>
-          <p>Custom AI agents, internal copilots, and prompt systems that take real work off your team's plate.</p>
-          <a class="more" href="mailto:hello@sales-architects.nl">Ask about this →</a>
+          <h3 data-i18n="card2.title">AI tools &amp; automation</h3>
+          <p data-i18n="card2.desc">Custom AI agents, internal copilots, and prompt systems that take real work off your team's plate.</p>
+          <a class="more" href="#contact" onclick="scrollToContact(event,'AI tools &amp; automation')" data-i18n="card2.link">Ask about automation →</a>
         </div>
         <div class="detail">
           <div class="pattern"><svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><polygon points="46.0,124.0 23.5,137.0 23.5,163.0 46.0,176.0 68.5,163.0 68.5,137.0" fill="none" stroke="#f2f2f0" stroke-width="1" opacity="0.90"/>
@@ -486,9 +545,9 @@
 <line x1="140.0" y1="130.0" x2="140.0" y2="116.0" stroke="#f2f2f0" stroke-width="1" opacity="0.35"/>
 <line x1="140.0" y1="130.0" x2="127.9" y2="137.0" stroke="#f2f2f0" stroke-width="1" opacity="0.35"/>
 <line x1="140.0" y1="130.0" x2="152.1" y2="137.0" stroke="#f2f2f0" stroke-width="1" opacity="0.35"/></svg></div>
-          <h3>Website design &amp; build</h3>
-          <p>Fast, modern sites drawn up from a blank sheet and shipped as production code — built to convert.</p>
-          <a class="more" href="mailto:hello@sales-architects.nl">Ask about this →</a>
+          <h3 data-i18n="card3.title">Website design &amp; build</h3>
+          <p data-i18n="card3.desc">Fast, modern sites drawn up from a blank sheet and shipped as production code — built to convert.</p>
+          <a class="more" href="#contact" onclick="scrollToContact(event,'Website design &amp; build')" data-i18n="card3.link">Ask about a website →</a>
         </div>
         <div class="detail">
           <div class="pattern"><svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><circle cx="105.3" cy="92.3" r="1.76" fill="#f2f2f0" opacity="0.91"/>
@@ -693,9 +752,9 @@
 <circle cx="161.3" cy="147.3" r="0.64" fill="#f2f2f0" opacity="0.19"/>
 <circle cx="146.8" cy="161.7" r="0.64" fill="#f2f2f0" opacity="0.19"/>
 <circle cx="129.4" cy="172.6" r="0.64" fill="#f2f2f0" opacity="0.19"/></svg></div>
-          <h3>Hosting &amp; infrastructure</h3>
-          <p>Managed hosting that stays fast and online, with monitoring and updates handled for you.</p>
-          <a class="more" href="mailto:hello@sales-architects.nl">Ask about this →</a>
+          <h3 data-i18n="card4.title">Hosting &amp; infrastructure</h3>
+          <p data-i18n="card4.desc">Managed hosting that stays fast and online, with monitoring and updates handled for you.</p>
+          <a class="more" href="#contact" onclick="scrollToContact(event,'Hosting &amp; infrastructure')" data-i18n="card4.link">Ask about hosting →</a>
         </div>
         <div class="detail">
           <div class="pattern"><svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><circle cx="90" cy="90" r="18" fill="none" stroke="#f2f2f0" stroke-width="0.8" opacity="0.48"/>
@@ -737,9 +796,9 @@
 <circle cx="130.5" cy="51.4" r="1.91" fill="#f2f2f0" opacity="0.91"/>
 <circle cx="102.5" cy="52.3" r="1.64" fill="#f2f2f0" opacity="0.92"/>
 <circle cx="142.3" cy="126.8" r="1.34" fill="#f2f2f0" opacity="0.60"/></svg></div>
-          <h3>SEO &amp; GEO optimization</h3>
-          <p>Optimized for Google rankings and for generative engine optimization — so you turn up in AI answers too.</p>
-          <a class="more" href="mailto:hello@sales-architects.nl">Ask about this →</a>
+          <h3 data-i18n="card5.title">SEO &amp; GEO optimization</h3>
+          <p data-i18n="card5.desc">Optimized for Google rankings and for generative engine optimization — so you turn up in AI answers too.</p>
+          <a class="more" href="#contact" onclick="scrollToContact(event,'SEO &amp; GEO optimization')" data-i18n="card5.link">Ask about SEO/GEO →</a>
         </div>
       </div>
     </div>
@@ -747,18 +806,59 @@
 
   <section class="sister">
     <div class="wrap">
-      <p><strong>Same team, different build.</strong> Sales Architects is the build-and-design studio of <strong>AI Personeelstraining</strong> — together we deliver tailor-made AI training, custom AI tools, and AI policy that actually gets implemented, so your team learns to work with, and profit from, AI and GPT.</p>
-      <a class="btn" href="https://aipersoneelstraining.nl" target="_blank" rel="noopener">Visit aipersoneelstraining.nl →</a>
+      <p data-i18n="sister.text"><strong>Same team, different build.</strong> Sales Architects is the build-and-design studio of <strong>AI Personeelstraining</strong>. Together we deliver tailor-made AI training, custom AI tools, and AI policy that actually gets implemented — so your team learns to work with, and profit from, AI and GPT.</p>
+      <a class="btn" href="https://aipersoneelstraining.nl" target="_blank" rel="noopener" data-i18n="sister.cta">Visit aipersoneelstraining.nl →</a>
     </div>
   </section>
 
-  <section class="on-paper" style="padding-block:64px 96px;">
+  <section class="on-paper" style="padding-block:64px 76px;">
     <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
       <div>
-        <p class="eyebrow">Selected work</p>
-        <h2 style="font-size:1.6rem;">See what we've already built.</h2>
+        <p class="eyebrow" data-i18n="cta.eyebrow">Selected work</p>
+        <h2 style="font-size:1.6rem;" data-i18n="cta.h2">See what we've already built.</h2>
       </div>
-      <a class="btn" href="#/projects" data-route>Open the projects page →</a>
+      <a class="btn" href="#/projects" data-route data-i18n="cta.link">Open the projects page →</a>
+    </div>
+  </section>
+
+  <section class="on-paper" id="contact" style="padding-block:76px 96px; border-top:1px solid var(--line);">
+    <div class="wrap" style="max-width:720px;">
+      <div class="section-head" style="margin-bottom:32px;">
+        <p class="eyebrow" data-i18n="contact.eyebrow">Get in touch</p>
+        <h2 data-i18n="contact.h2">Tell us about the project.</h2>
+        <p data-i18n="contact.intro">Sends straight to us — no email client required. We'll reply within a day or two.</p>
+      </div>
+      <form id="contact-form" class="contact-form" action="https://formspree.io/f/xaeyvaej" method="POST">
+        <input type="hidden" name="_subject" value="New project inquiry — sales-architects.nl">
+        <input class="hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field-row">
+          <label>
+            <span data-i18n="form.name">Name</span>
+            <input type="text" id="cf-name" name="name" autocomplete="name" required>
+          </label>
+          <label>
+            <span data-i18n="form.email">Email</span>
+            <input type="email" id="cf-email" name="email" autocomplete="email" required>
+          </label>
+        </div>
+        <label>
+          <span data-i18n="form.topicLabel">What do you need?</span>
+          <select id="cf-topic" name="topic">
+            <option value="AI training &amp; policy" data-i18n="card1.title">AI training &amp; policy</option>
+            <option value="AI tools &amp; automation" data-i18n="card2.title">AI tools &amp; automation</option>
+            <option value="Website design &amp; build" data-i18n="card3.title">Website design &amp; build</option>
+            <option value="Hosting &amp; infrastructure" data-i18n="card4.title">Hosting &amp; infrastructure</option>
+            <option value="SEO &amp; GEO optimization" data-i18n="card5.title">SEO &amp; GEO optimization</option>
+            <option value="Something else" data-i18n="form.topicOther">Something else</option>
+          </select>
+        </label>
+        <label>
+          <span data-i18n="form.messageLabel">Message</span>
+          <textarea id="cf-message" name="message" rows="5" data-i18n-placeholder="form.messagePlaceholder" placeholder="A few lines about what you're trying to get done." required></textarea>
+        </label>
+        <button type="submit" class="btn" data-i18n="form.submit">Send message →</button>
+        <p id="cf-status" class="form-status" role="status" aria-live="polite" hidden></p>
+      </form>
     </div>
   </section>
 </main>
@@ -769,8 +869,8 @@
     <div class="grid-bg" aria-hidden="true"></div>
     <div class="wrap">
       <p class="eyebrow">Sales-architects.nl · portfolio</p>
-      <h1 style="font-size:clamp(2rem,4.2vw,3.2rem);">Nine sites we've shipped.</h1>
-      <p class="lede" style="margin-top:20px;">A working recap of sites and tools we've designed, built, or built the SEO/GEO for — ours, our sister company's, and clients'. Every card links straight to the live site.</p>
+      <h1 style="font-size:clamp(2rem,4.2vw,3.2rem);" data-i18n="proj.h1">Nine sites we've shipped.</h1>
+      <p class="lede" style="margin-top:20px;" data-i18n="proj.lede">A working recap of sites and tools we've designed, built, or built the SEO/GEO for — ours, our sister company's, and clients'. Every card links straight to the live site.</p>
     </div>
     <div class="hero-spacer"></div>
   </section>
@@ -801,7 +901,7 @@
           <div class="proj-body">
             <div class="proj-domain">qrstudio.nl <span class="arrow">↗</span></div>
             <h3>QR Studio</h3>
-            <p class="desc">A free, no-signup QR code generator — URLs, Wi-Fi, vCards, WhatsApp and more, straight from the browser.</p>
+            <p class="desc" data-i18n="proj1.desc">A free, no-signup QR code generator — URLs, Wi-Fi, vCards, WhatsApp and more, straight from the browser.</p>
           </div>
         </a>
 
@@ -818,7 +918,7 @@
           <div class="proj-body">
             <div class="proj-domain">qrstudio.eu <span class="arrow">↗</span></div>
             <h3>QR Studio — EU</h3>
-            <p class="desc">The European home of QR Studio's free QR code generator, for a wider Wi-Fi and vCard audience.</p>
+            <p class="desc" data-i18n="proj2.desc">The European home of QR Studio's free QR code generator, for a wider Wi-Fi and vCard audience.</p>
           </div>
         </a>
 
@@ -835,7 +935,7 @@
           <div class="proj-body">
             <div class="proj-domain">thegreekandromangods.com <span class="arrow">↗</span></div>
             <h3>The Classical Pantheon</h3>
-            <p class="desc">An illustrated archive of 52 Greek &amp; Roman deities — realms, symbols, and interactive family trees.</p>
+            <p class="desc" data-i18n="proj3.desc">An illustrated archive of 52 Greek &amp; Roman deities — realms, symbols, and interactive family trees.</p>
           </div>
         </a>
 
@@ -851,7 +951,7 @@
           <div class="proj-body">
             <div class="proj-domain">firstcaesars.com <span class="arrow">↗</span></div>
             <h3>First Caesars</h3>
-            <p class="desc">A biographical archive of Rome's Julio-Claudian dynasty — Augustus through Nero, mapped by blood and adoption.</p>
+            <p class="desc" data-i18n="proj4.desc">A biographical archive of Rome's Julio-Claudian dynasty — Augustus through Nero, mapped by blood and adoption.</p>
           </div>
         </a>
 
@@ -868,8 +968,8 @@
           <div class="proj-body">
             <div class="proj-domain">pharaoharchive.com <span class="arrow">↗</span></div>
             <h3>Pharaoh Archive</h3>
-            <p class="desc">A chronological reference of 200+ ancient Egyptian rulers, browsable by dynasty and timeline, with illustrated entries and video.</p>
-            <span class="sib">AI project</span>
+            <p class="desc" data-i18n="proj5.desc">A chronological reference of 200+ ancient Egyptian rulers, browsable by dynasty and timeline, with illustrated entries and video.</p>
+            <span class="sib" data-i18n="proj5.tag">AI project</span>
           </div>
         </a>
 
@@ -885,8 +985,8 @@
           <div class="proj-body">
             <div class="proj-domain">aipersoneelstraining.nl <span class="arrow">↗</span></div>
             <h3>AI Personeelstraining</h3>
-            <p class="desc">Training and certification programs that help teams apply AI and GPT tools, plus AI policy for organizations.</p>
-            <span class="sib">Same team</span>
+            <p class="desc" data-i18n="proj6.desc">Training and certification programs that help teams apply AI and GPT tools, plus AI policy for organizations.</p>
+            <span class="sib" data-i18n="proj6.tag">Same team</span>
           </div>
         </a>
 
@@ -902,7 +1002,7 @@
           <div class="proj-body">
             <div class="proj-domain">gooisemedia.nl <span class="arrow">↗</span></div>
             <h3>Gooise Media</h3>
-            <p class="desc">Websites for SMBs in the Gooi region, built and optimized to rank in both Google and AI search.</p>
+            <p class="desc" data-i18n="proj7.desc">Websites for SMBs in the Gooi region, built and optimized to rank in both Google and AI search.</p>
           </div>
         </a>
 
@@ -918,7 +1018,7 @@
           <div class="proj-body">
             <div class="proj-domain">gooisedj.nl <span class="arrow">↗</span></div>
             <h3>Gooise DJ</h3>
-            <p class="desc">DJ and entertainment bookings for weddings, parties and corporate events across the Gooi region.</p>
+            <p class="desc" data-i18n="proj8.desc">DJ and entertainment bookings for weddings, parties and corporate events across the Gooi region.</p>
           </div>
         </a>
 
@@ -934,7 +1034,7 @@
           <div class="proj-body">
             <div class="proj-domain">gooisefotobooth.nl <span class="arrow">↗</span></div>
             <h3>Gooise Fotobooth</h3>
-            <p class="desc">Illuminated photo booths with instant personalized prints for events throughout the Gooi region.</p>
+            <p class="desc" data-i18n="proj9.desc">Illuminated photo booths with instant personalized prints for events throughout the Gooi region.</p>
           </div>
         </a>
 
@@ -957,20 +1057,24 @@
       </div>
       <div class="foot-links">
         <div class="foot-col">
-          <h4>Studio</h4>
-          <a href="#/" data-route>What we do</a>
-          <a href="#/projects" data-route>Projects</a>
-          <a href="mailto:hello@sales-architects.nl">Start a project</a>
+          <h4 data-i18n="foot.studio">Studio</h4>
+          <a href="#/" data-route data-i18n="nav.what">What we do</a>
+          <a href="#/projects" data-route data-i18n="nav.projects">Projects</a>
+          <a href="#contact" onclick="scrollToContact(event)" data-i18n="foot.start">Start a project</a>
         </div>
         <div class="foot-col">
-          <h4>Also ours</h4>
+          <h4 data-i18n="nav.contact">Contact</h4>
+          <a href="mailto:hello@sales-architects.nl">hello@sales-architects.nl</a>
+        </div>
+        <div class="foot-col">
+          <h4 data-i18n="foot.alsoOurs">Also ours</h4>
           <a href="https://aipersoneelstraining.nl" target="_blank" rel="noopener">AI Personeelstraining ↗</a>
         </div>
       </div>
     </div>
     <div class="foot-rule">
       <div class="foot-legal">
-        <span class="disclaimer">Sales Architects (sales-architects.nl) is an independent Dutch studio and is not affiliated with, and has no connection to, salesarchitects.nl or any similarly named company.</span>
+        <span class="disclaimer" data-i18n="foot.disclaimer">Sales Architects (sales-architects.nl) is an independent Dutch studio and is not affiliated with, and has no connection to, salesarchitects.nl or any similarly named company.</span>
         <span>© <span id="year"></span> Sales Architects, NL</span>
       </div>
     </div>
@@ -979,6 +1083,178 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------------- i18n ---------------- */
+  var I18N = {
+    en: {
+      'nav.what': 'What we do',
+      'nav.projects': 'Projects',
+      'nav.contact': 'Contact',
+      'nav.cta': 'Start a project →',
+      'hero.h1': 'Engineered for the AI-native sale.',
+      'hero.seeWork': 'See our work',
+      'hero.lede': 'AI training, AI tools, websites, hosting, and search — designed and run as one connected build, not five separate vendors.',
+      'services.h2': 'Five disciplines, one build.',
+      'services.intro': 'We train your people, design and build the tools, host them, and keep everything findable — one connected job.',
+      'card1.title': 'AI training &amp; policy',
+      'card1.desc': 'Tailor-made AI and GPT training for your team, plus AI policy we help you write and actually put into practice.',
+      'card1.link': 'Ask about training →',
+      'card2.title': 'AI tools &amp; automation',
+      'card2.desc': "Custom AI agents, internal copilots, and prompt systems that take real work off your team's plate.",
+      'card2.link': 'Ask about automation →',
+      'card3.title': 'Website design &amp; build',
+      'card3.desc': 'Fast, modern sites drawn up from a blank sheet and shipped as production code — built to convert.',
+      'card3.link': 'Ask about a website →',
+      'card4.title': 'Hosting &amp; infrastructure',
+      'card4.desc': 'Managed hosting that stays fast and online, with monitoring and updates handled for you.',
+      'card4.link': 'Ask about hosting →',
+      'card5.title': 'SEO &amp; GEO optimization',
+      'card5.desc': 'Optimized for Google rankings and for generative engine optimization — so you turn up in AI answers too.',
+      'card5.link': 'Ask about SEO/GEO →',
+      'sister.text': '<strong>Same team, different build.</strong> Sales Architects is the build-and-design studio of <strong>AI Personeelstraining</strong>. Together we deliver tailor-made AI training, custom AI tools, and AI policy that actually gets implemented — so your team learns to work with, and profit from, AI and GPT.',
+      'sister.cta': 'Visit aipersoneelstraining.nl →',
+      'cta.eyebrow': 'Selected work',
+      'cta.h2': "See what we've already built.",
+      'cta.link': 'Open the projects page →',
+      'contact.eyebrow': 'Get in touch',
+      'contact.h2': 'Tell us about the project.',
+      'contact.intro': "Sends straight to us — no email client required. We'll reply within a day or two.",
+      'form.name': 'Name',
+      'form.email': 'Email',
+      'form.topicLabel': 'What do you need?',
+      'form.topicOther': 'Something else',
+      'form.messageLabel': 'Message',
+      'form.messagePlaceholder': "A few lines about what you're trying to get done.",
+      'form.submit': 'Send message →',
+      'form.sending': 'Sending…',
+      'form.success': "Thanks — that's on its way. We'll reply within a day or two.",
+      'form.error': 'Something went wrong — please email hello@sales-architects.nl directly.',
+      'proj.h1': "Nine sites we've shipped.",
+      'proj.lede': "A working recap of sites and tools we've designed, built, or built the SEO/GEO for — ours, our sister company's, and clients'. Every card links straight to the live site.",
+      'proj1.desc': 'A free, no-signup QR code generator — URLs, Wi-Fi, vCards, WhatsApp and more, straight from the browser.',
+      'proj2.desc': "The European home of QR Studio's free QR code generator, for a wider Wi-Fi and vCard audience.",
+      'proj3.desc': 'An illustrated archive of 52 Greek &amp; Roman deities — realms, symbols, and interactive family trees.',
+      'proj4.desc': "A biographical archive of Rome's Julio-Claudian dynasty — Augustus through Nero, mapped by blood and adoption.",
+      'proj5.desc': 'A chronological reference of 200+ ancient Egyptian rulers, browsable by dynasty and timeline, with illustrated entries and video.',
+      'proj5.tag': 'AI project',
+      'proj6.desc': 'Training and certification programs that help teams apply AI and GPT tools, plus AI policy for organizations.',
+      'proj6.tag': 'Same team',
+      'proj7.desc': 'Websites for SMBs in the Gooi region, built and optimized to rank in both Google and AI search.',
+      'proj8.desc': 'DJ and entertainment bookings for weddings, parties and corporate events across the Gooi region.',
+      'proj9.desc': 'Illuminated photo booths with instant personalized prints for events throughout the Gooi region.',
+      'foot.studio': 'Studio',
+      'foot.start': 'Start a project',
+      'foot.alsoOurs': 'Also ours',
+      'foot.disclaimer': 'Sales Architects (sales-architects.nl) is an independent Dutch studio and is not affiliated with, and has no connection to, salesarchitects.nl or any similarly named company.',
+      'title.home': 'Sales Architects — AI training, AI tools, web, hosting & SEO/GEO',
+      'title.projects': 'Projects — Sales Architects'
+    },
+    nl: {
+      'nav.what': 'Wat we doen',
+      'nav.projects': 'Projecten',
+      'nav.contact': 'Contact',
+      'nav.cta': 'Start een project →',
+      'hero.h1': 'Gebouwd voor de AI-gedreven verkoop.',
+      'hero.seeWork': 'Bekijk ons werk',
+      'hero.lede': 'AI-training, AI-tools, websites, hosting en vindbaarheid — ontworpen en beheerd als één geheel, niet als vijf losse leveranciers.',
+      'services.h2': 'Vijf disciplines, één aanpak.',
+      'services.intro': 'We trainen uw mensen, ontwerpen en bouwen de tools, hosten ze en zorgen dat alles vindbaar blijft — als één samenhangend traject.',
+      'card1.title': 'AI-training &amp; beleid',
+      'card1.desc': 'Training op maat in AI en GPT voor uw team, plus AI-beleid dat we samen met u opstellen en écht laten landen in de praktijk.',
+      'card1.link': 'Vraag naar training →',
+      'card2.title': 'AI-tools &amp; automatisering',
+      'card2.desc': 'AI-agents op maat, interne copilots en promptsystemen die uw team echt werk uit handen nemen.',
+      'card2.link': 'Vraag naar automatisering →',
+      'card3.title': 'Websiteontwerp &amp; bouw',
+      'card3.desc': 'Snelle, moderne websites die we vanaf een leeg vel ontwerpen en als productieklare code opleveren — gebouwd om te converteren.',
+      'card3.link': 'Vraag naar een website →',
+      'card4.title': 'Hosting &amp; infrastructuur',
+      'card4.desc': 'Beheerde hosting die snel en online blijft, met monitoring en updates die wij voor u verzorgen.',
+      'card4.link': 'Vraag naar hosting →',
+      'card5.title': 'SEO- &amp; GEO-optimalisatie',
+      'card5.desc': 'Geoptimaliseerd voor posities in Google én voor generative engine optimization — zodat u ook in AI-antwoorden naar voren komt.',
+      'card5.link': 'Vraag naar SEO/GEO →',
+      'sister.text': '<strong>Zelfde team, andere build.</strong> Sales Architects is de build- en designstudio van <strong>AI Personeelstraining</strong>. Samen leveren we training op maat in AI, AI-tools op maat en AI-beleid dat écht wordt ingevoerd — zodat uw team leert werken met AI en GPT, en er ook profijt van heeft.',
+      'sister.cta': 'Bezoek aipersoneelstraining.nl →',
+      'cta.eyebrow': 'Uitgelicht werk',
+      'cta.h2': 'Bekijk wat we al hebben gebouwd.',
+      'cta.link': 'Open de projectenpagina →',
+      'contact.eyebrow': 'Neem contact op',
+      'contact.h2': 'Vertel ons over het project.',
+      'contact.intro': 'Gaat direct naar ons toe — geen e-mailprogramma nodig. We reageren binnen een paar werkdagen.',
+      'form.name': 'Naam',
+      'form.email': 'E-mailadres',
+      'form.topicLabel': 'Waar heeft u behoefte aan?',
+      'form.topicOther': 'Iets anders',
+      'form.messageLabel': 'Bericht',
+      'form.messagePlaceholder': 'Een paar regels over wat u wilt bereiken.',
+      'form.submit': 'Verstuur bericht →',
+      'form.sending': 'Bezig met versturen…',
+      'form.success': 'Bedankt — uw bericht is onderweg. We reageren binnen een paar werkdagen.',
+      'form.error': 'Er ging iets mis — stuur gerust rechtstreeks een e-mail naar hello@sales-architects.nl.',
+      'proj.h1': 'Negen sites die we hebben opgeleverd.',
+      'proj.lede': 'Een praktisch overzicht van sites en tools die we hebben ontworpen, gebouwd, of van SEO/GEO hebben voorzien — van onszelf, ons zusterbedrijf en klanten. Elke kaart linkt direct naar de live site.',
+      'proj1.desc': "Een gratis QR-codegenerator zonder registratie — voor URL's, wifi, vCards, WhatsApp en meer, direct vanuit de browser.",
+      'proj2.desc': "Het Europese thuis van QR Studio's gratis QR-codegenerator, voor een breder wifi- en vCard-publiek.",
+      'proj3.desc': 'Een geïllustreerd archief van 52 Griekse en Romeinse goden — met hun domeinen, symbolen en interactieve stambomen.',
+      'proj4.desc': 'Een biografisch archief van de Julisch-Claudische dynastie van Rome — van Augustus tot en met Nero, in kaart gebracht via bloedband en adoptie.',
+      'proj5.desc': 'Een chronologisch naslagwerk van ruim 200 Egyptische farao’s, te doorzoeken op dynastie en tijdlijn, met geïllustreerde pagina’s en video.',
+      'proj5.tag': 'AI-project',
+      'proj6.desc': 'Trainings- en certificeringsprogramma’s die teams helpen AI- en GPT-tools toe te passen, plus AI-beleid voor organisaties.',
+      'proj6.tag': 'Zelfde team',
+      'proj7.desc': 'Websites voor mkb-bedrijven in het Gooi, gebouwd en geoptimaliseerd om goed te scoren in zowel Google als AI-zoekresultaten.',
+      'proj8.desc': 'DJ- en entertainmentboekingen voor bruiloften, feesten en bedrijfsevenementen in de regio Gooi.',
+      'proj9.desc': 'Verlichte fotostudio’s met directe, persoonlijke prints voor evenementen in de hele Gooi-regio.',
+      'foot.studio': 'Studio',
+      'foot.start': 'Start een project',
+      'foot.alsoOurs': 'Ook van ons',
+      'foot.disclaimer': 'Sales Architects (sales-architects.nl) is een onafhankelijke Nederlandse studio en heeft geen enkele band met salesarchitects.nl of soortgelijk genaamde bedrijven.',
+      'title.home': 'Sales Architects — AI-training, AI-tools, web, hosting & SEO/GEO',
+      'title.projects': 'Projecten — Sales Architects'
+    }
+  };
+
+  var currentLang = 'en';
+
+  function applyLang(lang){
+    if (!I18N[lang]) lang = 'en';
+    currentLang = lang;
+    document.documentElement.setAttribute('lang', lang);
+    var dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key] != null) el.setAttribute('placeholder', dict[key]);
+    });
+    document.querySelectorAll('.lang-btn').forEach(function(btn){
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+    routes['#/'].title = dict['title.home'];
+    routes['#/projects'].title = dict['title.projects'];
+    var hash = window.location.hash || '#/';
+    if (!routes[hash]) hash = '#/';
+    document.title = routes[hash].title;
+    try { localStorage.setItem('sa-lang', lang); } catch (err) {}
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ applyLang(btn.getAttribute('data-lang')); });
+  });
+
+  var initialLang = 'en';
+  try {
+    var stored = localStorage.getItem('sa-lang');
+    if (stored === 'en' || stored === 'nl') {
+      initialLang = stored;
+    } else if (navigator.language && navigator.language.toLowerCase().indexOf('nl') === 0) {
+      initialLang = 'nl';
+    }
+  } catch (err) {
+    if (navigator.language && navigator.language.toLowerCase().indexOf('nl') === 0) initialLang = 'nl';
+  }
 
   var routes = {
     '#/': { el: document.getElementById('view-home'), title: 'Sales Architects — AI training, AI tools, web, hosting & SEO/GEO' },
@@ -1002,4 +1278,56 @@
 
   window.addEventListener('hashchange', route);
   route();
+  applyLang(initialLang);
+
+  function scrollToContact(e, topic){
+    if (e) e.preventDefault();
+    if (window.location.hash !== '#/') { window.location.hash = '#/'; }
+    if (topic) {
+      var sel = document.getElementById('cf-topic');
+      if (sel) sel.value = topic;
+    }
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        var el = document.getElementById('contact');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  var contactForm = document.getElementById('contact-form');
+  var cfStatus = document.getElementById('cf-status');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var btn = contactForm.querySelector('button[type="submit"]');
+      cfStatus.hidden = false;
+      cfStatus.className = 'form-status';
+      cfStatus.textContent = I18N[currentLang]['form.sending'];
+      btn.disabled = true;
+
+      fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      }).then(function(response){
+        if (response.ok) {
+          cfStatus.className = 'form-status success';
+          cfStatus.textContent = I18N[currentLang]['form.success'];
+          contactForm.reset();
+        } else {
+          return response.json().then(function(payload){
+            var detail = payload && payload.errors && payload.errors.map(function(er){ return er.message; }).join(', ');
+            cfStatus.className = 'form-status error';
+            cfStatus.textContent = detail || I18N[currentLang]['form.error'];
+          });
+        }
+      }).catch(function(){
+        cfStatus.className = 'form-status error';
+        cfStatus.textContent = I18N[currentLang]['form.error'];
+      }).finally(function(){
+        btn.disabled = false;
+      });
+    });
+  }
 </script>
